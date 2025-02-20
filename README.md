@@ -87,3 +87,102 @@ Para iniciar um novo projeto Django, você pode usar o comando `django-admin sta
     ```
     O servidor estará disponível em `http://127.0.0.1:8000/`.
 
+
+## Melhorias Finais
+
+### Adicionar CORS Headers
+
+Para permitir requisições do frontend, adicione CORS headers ao seu projeto Django.
+
+1. **Instalar o pacote `django-cors-headers`:**
+    ```bash
+    pip install django-cors-headers
+    ```
+
+2. **Configurar o `settings.py`:**
+    ```python
+    INSTALLED_APPS += ['corsheaders']
+    MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
+
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",  # React Frontend
+    ]
+    ```
+
+### Criar Seeds para Popular o Banco
+
+Para popular o banco de dados com dados iniciais, crie um script de seed.
+
+1. **Criar o script `core/management/commands/popular_db.py`:**
+    ```python
+    from django.core.management.base import BaseCommand
+    from core.models import Categoria, Produto
+
+    class Command(BaseCommand):
+        def handle(self, *args, **kwargs):
+            categorias = ["Eletrônicos", "Roupas", "Alimentos"]
+            for cat in categorias:
+                Categoria.objects.get_or_create(nome=cat)
+
+            produtos = [
+                {"nome": "Celular", "preco": 1500, "categoria": "Eletrônicos"},
+                {"nome": "Camisa", "preco": 50, "categoria": "Roupas"},
+                {"nome": "Pizza", "preco": 30, "categoria": "Alimentos"},
+            ]
+            
+            for prod in produtos:
+                categoria = Categoria.objects.get(nome=prod["categoria"])
+                Produto.objects.get_or_create(nome=prod["nome"], preco=prod["preco"], categoria=categoria)
+
+            self.stdout.write(self.style.SUCCESS("Banco populado com sucesso!"))
+    ```
+
+2. **Executar o script de seed:**
+    ```bash
+    python manage.py populate_db
+    ```
+    ## Estrutura do Projeto
+
+    Aqui está uma visão geral das pastas e arquivos do projeto e suas funções:
+
+    - **backend/**: Diretório principal do projeto Django.
+        - **manage.py**: Script de linha de comando para interagir com o projeto Django.
+        - **backend/**: Diretório contendo a configuração do projeto.
+            - **__init__.py**: Arquivo que indica que este diretório deve ser tratado como um pacote Python.
+            - **settings.py**: Arquivo de configuração do projeto Django.
+            - **urls.py**: Arquivo de roteamento de URLs do projeto.
+            - **wsgi.py**: Ponto de entrada para servidores web compatíveis com WSGI para servir o projeto.
+
+    - **core/**: Diretório para a aplicação principal do projeto.
+        - **models.py**: Definição dos modelos de dados.
+        - **views.py**: Definição das views que controlam a lógica de apresentação.
+        - **urls.py**: Roteamento de URLs específicas da aplicação.
+        - **admin.py**: Configurações do Django admin para os modelos.
+        - **migrations/**: Diretório que contém as migrações do banco de dados.
+
+    - **requirements.txt**: Arquivo que lista todas as dependências do projeto.
+
+    - **README.md**: Documentação do projeto.
+
+    - **.gitignore**: Arquivo que especifica quais arquivos e diretórios devem ser ignorados pelo Git.
+
+    - **Dockerfile**: Arquivo de configuração para criar uma imagem Docker do projeto.
+
+    - **docker-compose.yml**: Arquivo de configuração para definir e executar serviços Docker.
+
+    - **venv/**: Diretório do ambiente virtual Python (não deve ser incluído no controle de versão).
+
+    - **static/**: Diretório para arquivos estáticos (CSS, JavaScript, imagens).
+
+    - **templates/**: Diretório para templates HTML.
+
+    - **media/**: Diretório para arquivos de mídia carregados pelos usuários.
+
+    - **logs/**: Diretório para arquivos de log.
+
+    - **scripts/**: Diretório para scripts auxiliares e utilitários.
+
+    - **tests/**: Diretório para testes automatizados.
+
+    - **docs/**: Diretório para documentação adicional do projeto.
+
