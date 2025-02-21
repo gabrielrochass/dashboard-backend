@@ -6,17 +6,29 @@ from .serializers import CompanySerializer, EmployeeSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Count
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    # filterset_fields = ['name']
+    search_fields = ['name', 'address', 'phone', 'website']
+    ordering_fields = ['name', 'address', 'phone', 'website']
+    ordering = ['name']
+    
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['company']
+    search_fields = ['firstName', 'lastName', 'email', 'phone']
+    ordering_fields = ['firstName', 'lastName', 'email', 'phone']
+    ordering = ['firstName']
  
 class MetricsView(APIView):
-    
     def get(self, request):
         total_companies = Company.objects.count()
         total_employees = Employee.objects.count()
