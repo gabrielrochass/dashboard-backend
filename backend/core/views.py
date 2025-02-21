@@ -28,11 +28,10 @@ class MetricsView(APIView):
         min_employees_in_company = min_employees_in_company['count'] if min_employees_in_company else 0
 
         metrics = {
-            "total_companies": total_companies,
-            "total_employees": total_employees,
-            "avg_employees_per_company": avg_employees_per_company,
-            "max_employees_in_company": max_employees_in_company,
-            "min_employees_in_company": min_employees_in_company
-            
+            "Total Companies": total_companies,
+            "Total Employees": total_employees,
+            "Average Employees per Company": avg_employees_per_company,
+            "Maximum Employees per Company": max_employees_in_company,
+            "Minimum Employees per Company": min_employees_in_company
         }
         return Response(metrics)
