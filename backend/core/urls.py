@@ -1,3 +1,5 @@
+# define as rotas do app "core"
+
 from django.urls import path
 from .views import home
 
