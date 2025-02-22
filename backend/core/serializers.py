@@ -1,14 +1,9 @@
 # transforma todos os campos do modelo em campos serializáveis ou convertidos para JSON (API)
 
 from rest_framework import serializers
-from .models import Company, Employee
+from .models import Partner
 
-class CompanySerializer(serializers.ModelSerializer):
+class PartnerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Company
-        fields = '__all__'  # Inclui todos os campos
-
-class EmployeeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Employee
+        model = Partner
         fields = '__all__'

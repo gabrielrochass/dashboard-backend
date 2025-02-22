@@ -1,21 +1,13 @@
 # Create your models here. -> tabelas do banco de dados (modelos de dados)
 
 from django.db import models
-class Company(models.Model):
-    name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    phone = models.CharField(max_length=20)
-    website = models.URLField()
+from django.core.validators import MaxValueValidator
+class Partner(models.Model):
+    firstName = models.CharField(max_length=100)
+    lastName = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.name
-
-class Employee(models.Model):
-    firstName = models.CharField(max_length=255)
-    lastName = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=20)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.firstName} {self.lastName}"
+    participation = models.DecimalField(max_digits=5, decimal_places=2, validators=[MaxValueValidator(100.00)])
+    class Meta:
+        db_table = 'partners'
+        verbose_name = 'Partner'
+        verbose_name_plural = 'Partners'
