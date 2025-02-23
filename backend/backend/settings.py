@@ -132,9 +132,10 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',  # Interface navegável do DRF
         'rest_framework.renderers.JSONRenderer',  # Respostas em JSON
     ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # URL padrão do React
+    "http://localhost:3000",  
 ]
 

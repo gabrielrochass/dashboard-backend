@@ -35,5 +35,6 @@ class Partner(models.Model):
             raise ValidationError(errors)
 
     def save(self, *args, **kwargs):
-        self.full_clean()  # Chama a validação antes de salvar
+        self.full_clean()  
         super().save(*args, **kwargs)
+        
