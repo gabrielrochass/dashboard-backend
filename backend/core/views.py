@@ -1,49 +1,30 @@
-# Create your views here. -> lógica das requisições
-
 from rest_framework import viewsets
-from .models import Company, Employee
-from .serializers import CompanySerializer, EmployeeSerializer
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from django.db.models import Count
+from rest_framework import status
+from django.core.exceptions import ValidationError
+from .models import Partner
+from .serializers import PartnerSerializer
+from .filters import PartnerFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter, OrderingFilter
 
-class CompanyViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all()
-    serializer_class = CompanySerializer
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    # filterset_fields = ['name']
-    search_fields = ['name', 'address', 'phone', 'website']
-    ordering_fields = ['name', 'address', 'phone', 'website']
-    ordering = ['name']
+class PartnerViewSet(viewsets.ModelViewSet):
+    queryset = Partner.objects.all()
+    serializer_class = PartnerSerializer
+    filter_backends = [DjangoFilterBackend]
+    filter_class = PartnerFilter
+    filterset_fields = ['company', 'firstName', 'lastName', 'participation']
     
+    
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        
+        if serializer.is_valid():
+            try:
+                partner = Partner(**serializer.validated_data)
+                partner.full_clean()  # Validação manual antes de salvar
+                partner.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except ValidationError as e:
+                return Response({"erro": e.messages}, status=status.HTTP_400_BAD_REQUEST)
 
-class EmployeeViewSet(viewsets.ModelViewSet):
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['company']
-    search_fields = ['firstName', 'lastName', 'email', 'phone']
-    ordering_fields = ['firstName', 'lastName', 'email', 'phone']
-    ordering = ['firstName']
- 
-class MetricsView(APIView):
-    def get(self, request):
-        total_companies = Company.objects.count()
-        total_employees = Employee.objects.count()
-        avg_employees_per_company = total_employees / total_companies if total_companies > 0 else 0
-        max_employees_in_company = Employee.objects.values('company').annotate(count=Count('id')).order_by('-count').first()
-        max_employees_in_company = max_employees_in_company['count'] if max_employees_in_company else 0
-
-        min_employees_in_company = Employee.objects.values('company').annotate(count=Count('id')).order_by('count').first()
-        min_employees_in_company = min_employees_in_company['count'] if min_employees_in_company else 0
-
-        metrics = {
-            "Total Companies": total_companies,
-            "Total Employees": total_employees,
-            "Average Employees per Company": avg_employees_per_company,
-            "Maximum Employees per Company": max_employees_in_company,
-            "Minimum Employees per Company": min_employees_in_company
-        }
-        return Response(metrics)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
