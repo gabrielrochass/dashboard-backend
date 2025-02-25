@@ -18,7 +18,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
     
     # filtro
     filter_backends = [DjangoFilterBackend]
-    filter_class = CompanyFilter
+    filterset_class = CompanyFilter
     filterset_fields = ['name', 'cnpj', 'address']
     
     
