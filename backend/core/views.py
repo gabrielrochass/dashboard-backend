@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Partner, Company
-from .serializers import PartnerSerializer, CompanySerializer
+from .models import Partner, Company, Participation
+from .serializers import PartnerSerializer, CompanySerializer, ParticipationSerializer
 from .filters import PartnerFilter, CompanyFilter
 from django_filters.rest_framework import DjangoFilterBackend
 class PartnerViewSet(viewsets.ModelViewSet):
@@ -20,5 +20,10 @@ class CompanyViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = CompanyFilter
     filterset_fields = ['name', 'cnpj', 'address']
+    
+    
+class ParticipationViewSet(viewsets.ModelViewSet):
+    queryset = Participation.objects.all()
+    serializer_class = ParticipationSerializer
     
     

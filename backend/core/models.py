@@ -15,6 +15,17 @@ class Company(models.Model):
     
     def __str__(self):
         return self.name
+    
+class Participation(models.Model):
+    partner = models.ForeignKey(Partner, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    
+    def __str__(self):
+        return f'{self.partner} ({self.company}) - {self.percentage}%'
+    
+    class Meta:
+        unique_together = ['partner', 'company']
 
     
         
