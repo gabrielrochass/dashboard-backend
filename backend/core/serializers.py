@@ -18,6 +18,8 @@ class ParticipationSerializer(serializers.ModelSerializer):
     partnerName = serializers.CharField(source='partner.name', read_only=True)
     companyName = serializers.CharField(source='company.name', read_only=True)
     
+    partner = serializers.PrimaryKeyRelatedField(queryset=Partner.objects.all())
+    company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all())
     class Meta:
         model = Participation
-        fields = ['id', 'partnerName', 'companyName', 'percentage']
+        fields = ['id', 'partner', 'company', 'partnerName', 'companyName', 'percentage']
