@@ -14,6 +14,10 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ParticipationSerializer(serializers.ModelSerializer):
+    # pra não mostrar diretamente o id, mas sim o nome do parceiro e da empresa
+    partnerName = serializers.CharField(source='partner.name', read_only=True)
+    companyName = serializers.CharField(source='company.name', read_only=True)
+    
     class Meta:
         model = Participation
-        fields = '__all__'
+        fields = ['id', 'partnerName', 'companyName', 'percentage']

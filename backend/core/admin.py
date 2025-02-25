@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Partner, Company
+from .models import Partner, Company, Participation
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
@@ -14,3 +14,8 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ('name', 'cnpj')
     ordering = ('id',)
     
+@admin.register(Participation)
+class ParticipationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'partner', 'company', 'percentage')
+    search_fields = ('partner__name', 'company__name')
+    ordering = ('id',)
