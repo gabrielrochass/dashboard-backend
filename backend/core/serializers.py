@@ -23,3 +23,11 @@ class ParticipationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participation
         fields = ['id', 'partner', 'company', 'partnerName', 'companyName', 'percentage']
+        
+class DashboardGeneralStatsSerializer(serializers.Serializer):
+    totalPartners = serializers.IntegerField()
+    totalCompanies = serializers.IntegerField()
+    avgParnersPerCompany = serializers.FloatField()
+    avgParticipationPerPartner = serializers.FloatField()
+    companyMostPartners = serializers.CharField()
+    partnerMostCompanies = serializers.CharField()
