@@ -62,22 +62,22 @@ class DashboardGeneralStatsViewSet(viewsets.ViewSet):
         return Response(data)
     
 class PartnerStatsViewSet(viewsets.ViewSet):
-    def retrieve(self, request, pk=None):  # Use 'pk' para capturar o ID da URL
+    def retrieve(self, request, pk=None):  # captura o id da url
         try:
-            partner = Partner.objects.get(pk=pk)  # Agora pegamos o ID corretamente
+            partner = Partner.objects.get(pk=pk)  
         except Partner.DoesNotExist:
             return Response({'error': 'Partner not found'}, status=404)
 
-        # Quantidade de empresas que ele é parceiro
+        # quantidade de empresas que ele é parceiro
         totalCompanies = Participation.objects.filter(partner=partner).values('company').distinct().count()
 
-        # Percentual médio de participação dele nas empresas
+        # percentual médio de participação dele nas empresas
         avgParticipation = Participation.objects.filter(partner=partner).aggregate(Avg('percentage'))['percentage__avg']
 
-        # Maior parceiro
+        # maior parceiro
         mostParticipation = Participation.objects.filter(partner=partner).order_by('-percentage').first()
 
-        # Menor parceiro
+        # menor parceiro
         leastParticipation = Participation.objects.filter(partner=partner).order_by('percentage').first()
 
 
@@ -90,3 +90,36 @@ class PartnerStatsViewSet(viewsets.ViewSet):
         }
 
         return Response(data)
+
+class CompanyStatsViewSet(viewsets.ViewSet):
+    serializer_class = PartnerStatsSerializer
+    
+    def retrieve(self, request, pk=None):  # captura o id da url
+        try:
+            company = Company.objects.get(pk=pk)
+        except Company.DoesNotExist:
+            return Response({'error': 'Company not found'}, status=404)
+
+        # quantidade de parceiros da empresa
+        totalPartners = Participation.objects.filter(company=company).values('partner').distinct().count()
+
+        # percentual médio de participação dos parceiros
+        avgParticipation = Participation.objects.filter(company=company).aggregate(Avg('percentage'))['percentage__avg']
+        
+        # top 5 parceiros com maior participação
+        topPartners = Participation.objects.filter(company=company).order_by('-percentage')[:5]
+        
+        data = {
+            'company': company.name,
+            'totalPartners': totalPartners,
+            'avgParticipation': avgParticipation,
+            'topPartners': [
+                {
+                    'partner': p.partner.name,
+                    'percentage': p.percentage
+                } for p in topPartners
+            ]
+        }
+        
+        return Response(data)
+    

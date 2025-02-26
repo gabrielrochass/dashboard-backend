@@ -40,3 +40,9 @@ class PartnerStatsSerializer(serializers.Serializer):
     minPercentage = serializers.DecimalField(max_digits=5, decimal_places=2)
     maxPercentage = serializers.DecimalField(max_digits=5, decimal_places=2)
     
+    
+class CompanyStatsSerializer(serializers.Serializer):
+    company = serializers.CharField()
+    totalPartners = serializers.IntegerField()
+    totalPercentage = serializers.DecimalField(max_digits=5, decimal_places=2)
+    avgPercentage = serializers.DecimalField(max_digits=5, decimal_places=2)
