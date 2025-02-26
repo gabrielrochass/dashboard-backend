@@ -31,3 +31,12 @@ class DashboardGeneralStatsSerializer(serializers.Serializer):
     avgParticipationPerPartner = serializers.FloatField()
     companyMostPartners = serializers.CharField()
     partnerMostCompanies = serializers.CharField()
+    
+class PartnerStatsSerializer(serializers.Serializer):
+    partner = serializers.CharField()
+    totalParticipations = serializers.IntegerField()
+    totalPercentage = serializers.DecimalField(max_digits=5, decimal_places=2)
+    avgPercentage = serializers.DecimalField(max_digits=5, decimal_places=2)
+    minPercentage = serializers.DecimalField(max_digits=5, decimal_places=2)
+    maxPercentage = serializers.DecimalField(max_digits=5, decimal_places=2)
+    
