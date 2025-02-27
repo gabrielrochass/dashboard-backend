@@ -25,8 +25,11 @@ SECRET_KEY = 'django-insecure-5v(fv(bv=3#x9ac%1*h+h=(va^gti=!k7538rady3zw9www*7a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    "dashboard-backend-ngl8.onrender.com",  # Adicione o domínio do Render
+    "localhost",
+    "127.0.0.1"
+]
 
 # Application definition
 
