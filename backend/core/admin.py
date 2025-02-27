@@ -1,22 +1,21 @@
 from django.contrib import admin
-import django_filters
-from django.utils.translation import gettext_lazy as _
-from .models import Partner
+from .models import Partner, Company, Participation
 
-# Criar um FilterSet para pesquisa no Django Admin
-class PartnerFilter(django_filters.FilterSet):
-    company = django_filters.CharFilter(lookup_expr='icontains')
-    firstName = django_filters.CharFilter(lookup_expr='icontains')
-    lastName = django_filters.CharFilter(lookup_expr='icontains')
-
-    class Meta:
-        model = Partner
-        fields = ['company', 'firstName', 'lastName']
-
-# Configuração do Admin para Partner
+@admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ("firstName", "lastName", "company")  # Exibir no Admin
-    list_filter = ("company",)  # Adiciona filtros laterais
-    search_fields = ("firstName", "lastName", "company")  # Adiciona campo de busca
+    list_display = ('id', 'name', 'cpf', 'email')
+    search_fields = ('name', 'cpf')
+    ordering = ('id',)
+    
 
-admin.site.register(Partner, PartnerAdmin)
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'cnpj', 'address')
+    search_fields = ('name', 'cnpj')
+    ordering = ('id',)
+    
+@admin.register(Participation)
+class ParticipationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'partner', 'company', 'percentage')
+    search_fields = ('partner__name', 'company__name')
+    ordering = ('id',)

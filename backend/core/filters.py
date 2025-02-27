@@ -1,13 +1,33 @@
 import django_filters
-from .models import Partner
+from .models import Partner, Company, Participation
 
 class PartnerFilter(django_filters.FilterSet):
-    company = django_filters.CharFilter(field_name="company", lookup_expr='icontains') # checa se o campo contém o valor (case insensitive)
-    # min_participation = django_filters.NumberFilter(field_name="participation", lookup_expr='gte')
-    # max_participation = django_filters.NumberFilter(field_name="participation", lookup_expr='lte')
-    firstName = django_filters.CharFilter(field_name="firstName", lookup_expr='icontains')
-    lastName = django_filters.CharFilter(field_name="lastName", lookup_expr='icontains')
-
+    name = django_filters.CharFilter(lookup_expr='icontains', label='Name')
+    cpf = django_filters.CharFilter(lookup_expr='icontains', label='CPF')
+    email = django_filters.CharFilter(lookup_expr='icontains', label='Email')
+    
     class Meta:
         model = Partner
-        fields = ['company', 'firstName', 'lastName']
+        fields = ['name', 'cpf', 'email']
+        
+        
+class CompanyFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='icontains', label='Name')
+    cnpj = django_filters.CharFilter(lookup_expr='icontains', label='CNPJ')
+    address = django_filters.CharFilter(lookup_expr='icontains', label='Address')
+    
+    class Meta:
+        model = Company
+        fields = ['name', 'cnpj', 'address']
+        
+import django_filters
+from .models import Partner, Company, Participation
+
+class ParticipationFilter(django_filters.FilterSet):
+    partner = django_filters.CharFilter(field_name="partner__name", lookup_expr="icontains", label="Partner Name")
+    company = django_filters.CharFilter(field_name="company__name", lookup_expr="icontains", label="Company Name")
+    percentage = django_filters.NumberFilter(field_name="percentage", lookup_expr="exact", label="Participation (%)")
+
+    class Meta:
+        model = Participation
+        fields = ["partner", "company", "percentage"]
