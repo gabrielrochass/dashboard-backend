@@ -1,5 +1,4 @@
 # transforma todos os campos do modelo em campos serializáveis ou convertidos para JSON (API)
-
 from rest_framework import serializers
 from .models import Partner, Company, Participation
 
@@ -18,12 +17,15 @@ class ParticipationSerializer(serializers.ModelSerializer):
     partnerName = serializers.CharField(source='partner.name', read_only=True)
     companyName = serializers.CharField(source='company.name', read_only=True)
     
+    # select fields que pegam o id do parceiro e da empresa mostrando o nome
     partner = serializers.PrimaryKeyRelatedField(queryset=Partner.objects.all())
     company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all())
     class Meta:
         model = Participation
         fields = ['id', 'partner', 'company', 'partnerName', 'companyName', 'percentage']
         
+        
+# como não é um model, não tem Meta -> definir os campos manualmente
 class DashboardGeneralStatsSerializer(serializers.Serializer):
     totalPartners = serializers.IntegerField()
     totalCompanies = serializers.IntegerField()

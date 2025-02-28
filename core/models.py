@@ -1,3 +1,5 @@
+# criação das tabelas no banco de dados 
+
 from django.db import models
 from django.core.validators import MinLengthValidator
 class Partner(models.Model):
@@ -17,8 +19,8 @@ class Company(models.Model):
         return self.name
     
 class Participation(models.Model):
-    partner = models.ForeignKey(Partner, on_delete=models.CASCADE)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    partner = models.ForeignKey(Partner, on_delete=models.CASCADE) # se deletar um partner, deleta a participação
+    company = models.ForeignKey(Company, on_delete=models.CASCADE) # foreign key para a tabela Company -> puxa o id da tabela
     percentage = models.DecimalField(max_digits=5, decimal_places=2)
     
     def __str__(self):

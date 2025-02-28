@@ -1,3 +1,4 @@
+# configura a interface de administração do Django para os modelos de dados do app core
 from django.contrib import admin
 from .models import Partner, Company, Participation
 

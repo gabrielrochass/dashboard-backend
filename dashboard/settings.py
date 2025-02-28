@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-5v(fv(bv=3#x9ac%1*h+h=(va^gti=!k7538rady3zw9www*7a
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "dashboard-backend-ngl8.onrender.com",  # Adicione o domínio do Render
+    "dashboard-backend-ngl8.onrender.com", 
     "localhost",
-    "127.0.0.1"
+    "127.0.0.1",
 ]
 
 # Application definition
@@ -40,10 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
-    'rest_framework',
-    'django_filters',
-    'corsheaders',
+    'core', # app principal
+    'rest_framework', # criar API
+    'django_filters', # filtros
+    'corsheaders', # permite que o frontend acesse o backend
 ]
 
 MIDDLEWARE = [

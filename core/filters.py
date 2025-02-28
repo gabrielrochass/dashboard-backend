@@ -1,6 +1,9 @@
+# define os filtros para os modelos
 import django_filters
 from .models import Partner, Company, Participation
 
+# lookup_expr -> operador de comparação
+# icontains -> case insensitive
 class PartnerFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains', label='Name')
     cpf = django_filters.CharFilter(lookup_expr='icontains', label='CPF')
@@ -19,9 +22,6 @@ class CompanyFilter(django_filters.FilterSet):
     class Meta:
         model = Company
         fields = ['name', 'cnpj', 'address']
-        
-import django_filters
-from .models import Partner, Company, Participation
 
 class ParticipationFilter(django_filters.FilterSet):
     partner = django_filters.CharFilter(field_name="partner__name", lookup_expr="icontains", label="Partner Name")
